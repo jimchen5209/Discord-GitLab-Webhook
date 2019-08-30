@@ -664,6 +664,10 @@ function processData(type, data) {
         break;
 
       case 'Pipeline Hook':
+        if (data.object_attributes.status != "success" && data.object_attributes.status != "failed") {
+          console.log('Skipping ${data.object_attributes.status} for not success and failed status');
+          break;
+        };
         output.DESCRIPTION = `**Pipeline Status Change** [${data.object_attributes.status}]\n`;
 
         let status_emote = '';
