@@ -339,6 +339,7 @@ function processData(type, data) {
     output.TITLE = `[${data.project.path_with_namespace}] ${type}`;
   }
 
+  let skipped = false;
   try {
     switch (type) {
 
@@ -665,6 +666,7 @@ function processData(type, data) {
 
       case 'Pipeline Hook':
         if (data.object_attributes.status != "success" && data.object_attributes.status != "failed") {
+          skipped = true
           console.log('Skipping ${data.object_attributes.status} for not success and failed status');
           break;
         };
@@ -839,7 +841,9 @@ function processData(type, data) {
   }
 
   // Send data via webhook
-  sendData(output);
+  if (!skipped) {
+    sendData(output);
+  }
 }
 
 function sendData(input) {
